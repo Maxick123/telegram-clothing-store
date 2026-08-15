@@ -18,6 +18,7 @@ class Settings(BaseSettings):
     bootstrap_support_login: str = "support"
     bootstrap_support_password: str | None = None
     auto_create_schema: bool = False
+    stock_reservation_minutes: int = 15
 
 
 @lru_cache

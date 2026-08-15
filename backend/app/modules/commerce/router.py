@@ -9,7 +9,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.db import get_session
 from app.modules.catalog.models import Product, ProductVariant
 from app.modules.commerce.models import Cart, CartItem
-from app.modules.commerce.schemas import CartItemCreate
+from app.modules.commerce.order_service import checkout_cart
+from app.modules.commerce.schemas import CartItemCreate, CheckoutCreate
 from app.modules.customers.models import Customer, Favorite
 
 router = APIRouter(prefix="/api/v1", tags=["commerce"])
@@ -70,3 +71,18 @@ async def add_favorite(product_id: UUID, session: Session, customer: Annotated[C
         await session.rollback()
         raise HTTPException(status_code=409, detail="already_favorite") from None
     return {"product_id": str(product.id)}
+
+
+@router.post("/checkout", status_code=201)
+async def checkout(payload: CheckoutCreate, session: Session, customer: Annotated[Customer, Depends(customer_from_telegram)]) -> dict[str, object]:
+    order, items = await checkout_cart(session, customer, payload)
+    return {
+        "id": str(order.id),
+        "status_code": order.status_code,
+        "subtotal_kopecks": order.subtotal_kopecks,
+        "discount_kopecks": order.discount_kopecks,
+        "delivery_cost_kopecks": order.delivery_cost_kopecks,
+        "total_kopecks": order.total_kopecks,
+        "reservation_expires_at": order.reservation_expires_at.isoformat(),
+        "items": [{"variant_id": str(item.variant_id), "quantity": item.quantity, "unit_price_kopecks": item.unit_price_kopecks} for item in items],
+    }

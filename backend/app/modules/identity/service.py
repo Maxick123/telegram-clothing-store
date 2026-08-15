@@ -7,7 +7,7 @@ from app.core.config import get_settings
 from app.core.security import hash_password, hash_refresh_token, new_refresh_token, verify_password
 from app.modules.identity.models import Permission, RefreshSession, Role, Staff
 
-ALL_PERMISSIONS = {"staff.read", "staff.manage", "products.read", "products.manage", "orders.read", "orders.update_status", "customers.read", "conversations.read", "conversations.reply"}
+ALL_PERMISSIONS = {"staff.read", "staff.manage", "products.read", "products.manage", "orders.read", "orders.update_status", "customers.read", "conversations.read", "conversations.reply", "marketing.manage"}
 ROLE_PERMISSIONS = {
     "Administrator": ALL_PERMISSIONS,
     "OrdersManager": {"orders.read", "orders.update_status", "customers.read", "conversations.read", "conversations.reply"},
@@ -59,6 +59,9 @@ async def seed_identity(session: AsyncSession) -> None:
         if role is None:
             role = Role(name=name, permissions=[permissions[code] for code in sorted(codes)])
             session.add(role)
+        else:
+            existing_codes = {permission.code for permission in role.permissions}
+            role.permissions.extend(permissions[code] for code in sorted(codes - existing_codes))
         roles[name] = role
     await session.flush()
 
