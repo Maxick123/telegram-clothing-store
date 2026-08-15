@@ -9,6 +9,7 @@ from app.modules.identity.service import seed_identity
 from app.modules.catalog.router import router as catalog_router
 from app.modules.commerce.router import router as commerce_router
 from app.modules.marketing.router import router as marketing_router
+from app.modules.payments.router import router as payments_router
 
 
 @asynccontextmanager
@@ -25,6 +26,7 @@ app.include_router(identity_router)
 app.include_router(catalog_router)
 app.include_router(commerce_router)
 app.include_router(marketing_router)
+app.include_router(payments_router)
 
 
 @app.get("/health", tags=["system"])

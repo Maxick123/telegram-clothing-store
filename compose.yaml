@@ -44,6 +44,9 @@ services:
       BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-}
       BOOTSTRAP_SUPPORT_LOGIN: ${BOOTSTRAP_SUPPORT_LOGIN:-support}
       BOOTSTRAP_SUPPORT_PASSWORD: ${BOOTSTRAP_SUPPORT_PASSWORD:-}
+      YOOKASSA_SHOP_ID: ${YOOKASSA_SHOP_ID:-}
+      YOOKASSA_SECRET_KEY: ${YOOKASSA_SECRET_KEY:-}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://localhost:8080}
     depends_on:
       postgres:
         condition: service_healthy
@@ -63,6 +66,7 @@ services:
     environment:
       BACKEND_URL: http://backend:8000
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_ADMIN_GROUP_ID: ${TELEGRAM_ADMIN_GROUP_ID:-}
     depends_on:
       backend:
         condition: service_healthy

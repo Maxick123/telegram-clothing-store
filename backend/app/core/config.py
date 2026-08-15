@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     bootstrap_support_password: str | None = None
     auto_create_schema: bool = False
     stock_reservation_minutes: int = 15
+    yookassa_shop_id: str | None = None
+    yookassa_secret_key: str | None = None
+    public_base_url: str = "http://localhost:8080"
 
 
 @lru_cache
