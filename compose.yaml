@@ -38,6 +38,12 @@ services:
       DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-clothing_store}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-clothing_store}
       REDIS_URL: redis://redis:6379/0
       JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set in .env}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      AUTO_CREATE_SCHEMA: ${AUTO_CREATE_SCHEMA:-true}
+      BOOTSTRAP_ADMIN_LOGIN: ${BOOTSTRAP_ADMIN_LOGIN:-admin}
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-}
+      BOOTSTRAP_SUPPORT_LOGIN: ${BOOTSTRAP_SUPPORT_LOGIN:-support}
+      BOOTSTRAP_SUPPORT_PASSWORD: ${BOOTSTRAP_SUPPORT_PASSWORD:-}
     depends_on:
       postgres:
         condition: service_healthy

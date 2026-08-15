@@ -1,22 +1,26 @@
-"""Temporary HTTP bootstrap; FastAPI replaces this entry point in task 2."""
+from contextlib import asynccontextmanager
 
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from fastapi import FastAPI
 
-
-class HealthHandler(BaseHTTPRequestHandler):
-    def do_GET(self) -> None:  # noqa: N802
-        if self.path == "/health":
-            self.send_response(200)
-            self.send_header("Content-Type", "application/json")
-            self.end_headers()
-            self.wfile.write(b'{"status":"ok"}')
-            return
-        self.send_response(404)
-        self.end_headers()
-
-    def log_message(self, format: str, *args: object) -> None:
-        return
+from app.core.config import get_settings
+from app.core.db import Base, SessionFactory, engine
+from app.modules.identity.router import router as identity_router
+from app.modules.identity.service import seed_identity
 
 
-if __name__ == "__main__":
-    ThreadingHTTPServer(("0.0.0.0", 8000), HealthHandler).serve_forever()
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    if get_settings().auto_create_schema:
+        async with engine.begin() as connection:
+            await connection.run_sync(Base.metadata.create_all)
+    async with SessionFactory() as session:
+        await seed_identity(session)
+    yield
+
+app = FastAPI(title="Clothing Store API", version="0.1.0", lifespan=lifespan)
+app.include_router(identity_router)
+
+
+@app.get("/health", tags=["system"])
+async def health() -> dict[str, str]:
+    return {"status": "ok"}
