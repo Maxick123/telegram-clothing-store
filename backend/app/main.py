@@ -6,6 +6,7 @@ from app.core.config import get_settings
 from app.core.db import Base, SessionFactory, engine
 from app.modules.identity.router import router as identity_router
 from app.modules.identity.service import seed_identity
+from app.modules.catalog.router import router as catalog_router
 
 
 @asynccontextmanager
@@ -19,6 +20,7 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(title="Clothing Store API", version="0.1.0", lifespan=lifespan)
 app.include_router(identity_router)
+app.include_router(catalog_router)
 
 
 @app.get("/health", tags=["system"])
