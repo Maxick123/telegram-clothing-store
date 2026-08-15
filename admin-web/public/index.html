@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#141414">
+    <title>Clothdesk — управление магазином</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main id="loginView" class="login-layout">
+      <section class="login-brand" aria-label="Clothdesk">
+        <div class="wordmark"><span class="wordmark-mark">C</span> clothdesk</div>
+        <div class="login-copy">
+          <p class="eyebrow">Ваша операционная витрина</p>
+          <h1>Управляйте магазином,<br>а не десятком чатов.</h1>
+          <p>Заказы, остатки, клиенты и поддержка — в одном тихом рабочем пространстве.</p>
+        </div>
+        <div class="login-note"><span class="live-dot"></span> Данные защищены и доступны только сотрудникам</div>
+      </section>
+      <section class="login-panel">
+        <form id="loginForm" class="login-card">
+          <p class="eyebrow">Вход для сотрудников</p>
+          <h2>С возвращением</h2>
+          <p class="muted">Используйте логин и пароль, которые создал администратор.</p>
+          <label>Логин <input id="login" name="login" autocomplete="username" placeholder="admin" required></label>
+          <label>Пароль <div class="password-field"><input id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required><button class="icon-button" type="button" data-action="show-password" aria-label="Показать пароль">◉</button></div></label>
+          <p id="loginError" class="form-error" role="alert" hidden></p>
+          <button class="button primary full" type="submit">Войти в панель <span>→</span></button>
+          <p class="login-help">Нет доступа? Обратитесь к администратору магазина.</p>
+        </form>
+      </section>
+    </main>
+
+    <div id="appView" class="app-layout" hidden>
+      <aside class="sidebar" aria-label="Основная навигация">
+        <div class="brand-row"><div class="wordmark"><span class="wordmark-mark">C</span> clothdesk</div><button class="icon-button mobile-only" data-action="close-menu" aria-label="Закрыть меню">×</button></div>
+        <div class="store-switch"><span class="store-avatar">M</span><span><b>MONO / store</b><small>Telegram-магазин</small></span><span class="chevron">⌄</span></div>
+        <nav class="nav-list">
+          <a href="#dashboard" data-section="dashboard" class="nav-link active"><span>▦</span>Обзор</a>
+          <p class="nav-heading">Продажи</p>
+          <a href="#orders" data-section="orders" class="nav-link"><span>□</span>Заказы <b class="nav-count">12</b></a>
+          <a href="#customers" data-section="customers" class="nav-link"><span>◉</span>Клиенты</a>
+          <a href="#chats" data-section="chats" class="nav-link"><span>◌</span>Чаты <b class="nav-count warm">7</b></a>
+          <p class="nav-heading">Каталог</p>
+          <a href="#products" data-section="products" class="nav-link"><span>◇</span>Товары</a>
+          <a href="#inventory" data-section="inventory" class="nav-link"><span>▤</span>Остатки</a>
+          <a href="#collections" data-section="collections" class="nav-link"><span>◈</span>Коллекции</a>
+          <p class="nav-heading">Рост</p>
+          <a href="#mailings" data-section="mailings" class="nav-link"><span>↗</span>Рассылки</a>
+          <a href="#promos" data-section="promos" class="nav-link"><span>⌁</span>Промокоды</a>
+          <a href="#analytics" data-section="analytics" class="nav-link"><span>⌁</span>Аналитика</a>
+        </nav>
+        <div class="sidebar-bottom"><a href="#settings" data-section="settings" class="nav-link"><span>⚙</span>Настройки</a><button class="profile-card" data-action="logout"><span class="staff-avatar">А</span><span><b id="staffName">Администратор</b><small id="staffRole">Полный доступ</small></span><span>⋮</span></button></div>
+      </aside>
+
+      <section class="workspace">
+        <header class="topbar"><button class="icon-button mobile-menu" data-action="open-menu" aria-label="Открыть меню">☰</button><div class="crumb"><span id="pageKicker">Панель управления</span><h1 id="pageTitle">Доброе утро, Алексей</h1></div><div class="top-actions"><button id="globalSearch" class="search-trigger" data-action="search"><span>⌕</span><span>Поиск</span><kbd>⌘ K</kbd></button><button class="icon-button theme-toggle" data-action="toggle-theme" aria-label="Сменить тему">◐</button><button class="icon-button notification-button" data-action="notifications" aria-label="Уведомления">♢<i></i></button></div></header>
+        <div id="offlineNotice" class="offline-notice" hidden>Сервер временно недоступен. Показаны последние данные интерфейса.</div>
+        <div id="content" class="content" tabindex="-1"></div>
+      </section>
+    </div>
+
+    <dialog id="commandDialog" class="command-dialog"><form method="dialog"><div class="command-search"><span>⌕</span><input id="commandInput" placeholder="Найти заказ, клиента или действие" autocomplete="off"><kbd>Esc</kbd></div><div id="commandResults" class="command-results"></div></form></dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="app.js" defer></script>
+  </body>
+</html>
